@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Современный профессиональный сайт с поддержкой светлой и тёмной темы."
+  />
+
+  <title>Ваш бренд — современный сайт</title>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #ffffff;
+      --surface: #f5f7fb;
+      --surface-hover: #edf2f8;
+      --text: #0b0f19;
+      --muted: #5c6473;
+      --border: #dfe5ee;
+      --primary: #1769e0;
+      --primary-hover: #0f57bf;
+      --primary-text: #ffffff;
+      --shadow: 0 18px 50px rgba(20, 35, 60, 0.08);
+      --header-bg: rgba(255, 255, 255, 0.82);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0b0e14;
+      --surface: #121722;
+      --surface-hover: #18202e;
+      --text: #f4f7fb;
+      --muted: #a4adbb;
+      --border: #273142;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-text: #ffffff;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+      --header-bg: rgba(11, 14, 20, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        Roboto,
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "Segoe UI",
+        sans-serif;
+      line-height: 1.6;
+      transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      background: var(--header-bg);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle {
+      width: 44px;
+      height: 44px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--surface-hover);
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle:focus-visible,
+    .button:focus-visible {
+      outline: 3px solid rgba(23, 105, 224, 0.28);
+      outline-offset: 3px;
+    }
+
+    .theme-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .hero {
+      padding: 112px 0 88px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      align-items: center;
+      gap: 64px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 2px;
+      border-radius: 99px;
+      background: var(--primary);
+    }
+
+    h1 {
+      max-width: 820px;
+      margin: 0;
+      font-size: clamp(48px, 7vw, 88px);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      font-weight: 850;
+    }
+
+    .hero-text {
+      max-width: 680px;
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 21px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 38px;
+    }
+
+    .button {
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 22px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      font-weight: 750;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: var(--primary);
+      color: var(--primary-text);
+      box-shadow: 0 10px 24px rgba(23, 105, 224, 0.22);
+    }
+
+    .button-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .button-secondary {
+      border-color: var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .button-secondary:hover {
+      background: var(--surface-hover);
+    }
+
+    .preview-card {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .preview-card::before {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      top: -80px;
+      right: -70px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0.12;
+      filter: blur(2px);
+    }
+
+    .window-bar {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 40px;
+    }
+
+    .window-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    .preview-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .preview-title {
+      max-width: 330px;
+      margin: 14px 0 0;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+    }
+
+    .preview-lines {
+      display: grid;
+      gap: 12px;
+      margin-top: 46px;
+    }
+
+    .line {
+      height: 12px;
+      border-radius: 99px;
+      background: var(--border);
+    }
+
+    .line:nth-child(1) {
+      width: 92%;
+    }
+
+    .line:nth-child(2) {
+      width: 72%;
+    }
+
+    .line:nth-child(3) {
+      width: 84%;
+    }
+
+    .features {
+      padding: 0 0 112px;
+    }
+
+    .section-heading {
+      max-width: 700px;
+      margin-bottom: 34px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+    }
+
+    .section-heading p {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      background: var(--surface-hover);
+    }
+
+    .feature-number {
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .feature-card h3 {
+      margin: 20px 0 8px;
+      font-size: 21px;
+      letter-spacing: -0.025em;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-content {
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        padding-top: 80px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 46px;
+      }
+
+      .preview-card {
+        min-height: 340px;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .nav {
+        min-height: 64px;
+      }
+
+      .hero {
+        padding: 64px 0 72px;
+      }
+
+      h1 {
+        font-size: clamp(44px, 15vw, 66px);
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .footer-content {
+        min-height: 110px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 4px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem("theme");
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+
+      const initialTheme =
+        savedTheme === "dark" || savedTheme === "light"
+          ? savedTheme
+          : systemPrefersDark
+            ? "dark"
+            : "light";
+
+      document.documentElement.dataset.theme = initialTheme;
+    })();
+  </script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="logo" href="#" aria-label="На главную">YOURBRAND</a>
+
+      <div class="nav-actions">
+        <a class="button button-primary" href="#contact">Связаться</a>
+
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Включить тёмную тему"
+          title="Сменить тему"
+        >
+          <svg
+            class="theme-icon"
+            id="themeIcon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          ></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Спокойный цифровой дизайн</div>
+
+          <h1>Создаём ясные и сильные решения.</h1>
+
+          <p class="hero-text">
+            Минималистичный сайт для специалиста, команды или продукта.
+            Чистая типографика, аккуратная сетка и ничего лишнего.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#contact">
+              Начать проект
+            </a>
+            <a class="button button-secondary" href="#services">
+              Подробнее
+            </a>
+          </div>
+        </div>
+
+        <aside class="preview-card" aria-label="Пример интерфейса">
+          <div class="window-bar" aria-hidden="true">
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+          </div>
+
+          <div class="preview-label">Новый стандарт</div>
+          <h2 class="preview-title">Просто. Уверенно. Профессионально.</h2>
+
+          <div class="preview-lines" aria-hidden="true">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="features" id="services">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Всё необходимое для хорошего первого впечатления.</h2>
+          <p>
+            Структура легко меняется под портфолио, агентство, сервис или
+            персональную страницу.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-number">01</span>
+            <h3>Адаптивный дизайн</h3>
+            <p>
+              Страница аккуратно выглядит на компьютере, планшете и телефоне.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-number">02</span>
+            <h3>Светлая и тёмная тема</h3>
+            <p>
+              Выбор пользователя сохраняется и применяется при следующем
+              посещении.
+            </p>
+          </article>
+
+          <article class="feature-card">
+            <span class="feature-number">03</span>
+            <h3>Быстрая загрузка</h3>
+            <p>
+              Один HTML-файл без тяжёлых библиотек и внешних зависимостей.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="contact">
+      <div class="container">
+        <div class="preview-card">
+          <div class="preview-label">Есть идея?</div>
+          <h2 class="preview-title">Давайте превратим её в аккуратный сайт.</h2>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="mailto:hello@example.com">
+              hello@example.com
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <span>© <span id="year"></span> YOURBRAND</span>
+      <span>Сделано спокойно и аккуратно.</span>
+    </div>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById("themeToggle");
+    const icon = document.getElementById("themeIcon");
+    const year = document.getElementById("year");
+
+    const icons = {
+      sun: `
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="m4.93 4.93 1.42 1.42"></path>
+        <path d="m17.66 17.66 1.41 1.41"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="m6.34 17.66-1.41 1.41"></path>
+        <path d="m19.07 4.93-1.41 1.42"></path>
+      `,
+      moon: `
+        <path d="M21 12.79A9 9 0 1 1 11.21 3
+          7 7 0 0 0 21 12.79z"></path>
+      `
+    };
+
+    function updateThemeButton() {
+      const isDark = root.dataset.theme === "dark";
+
+      icon.innerHTML = isDark ? icons.sun : icons.moon;
+      toggle.setAttribute(
+        "aria-label",
+        isDark ? "Включить светлую тему" : "Включить тёмную тему"
+      );
+    }
+
+    toggle.addEventListener("click", () => {
+      const nextTheme =
+        root.dataset.theme === "dark" ? "light" : "dark";
+
+      root.dataset.theme = nextTheme;
+      localStorage.setItem("theme", nextTheme);
+      updateThemeButton();
+    });
+
+    year.textContent = new Date().getFullYear();
+    updateThemeButton();
+  </script>
+</body>
+</html>
