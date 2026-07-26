@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="1WantToPiglet — Utilities & profile">
-<title>Отчётность — 1WantToPiglet</title>
+<title>Forks — 1WantToPiglet</title>
 <style>
 :root{
   --bg:#f6f8fc;--panel:#fff;--text:#0a1020;--muted:#6b7484;--line:#e0e6ef;
@@ -182,62 +182,36 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
   <nav>
     <a class="nav-item " href="../home/">Home</a>
     <a class="nav-item " href="../filters/">Filters</a>
-    <a class="nav-item " href="../forks/">Forks</a>
-    <a class="nav-item active" href="../otchet/">Отчётность</a>
+    <a class="nav-item active" href="../forks/">Forks</a>
+    <a class="nav-item " href="../otchet/">Отчётность</a>
   </nav>
 </aside>
 <div class="overlay" id="overlay"></div>
+
 <main>
 <section class="hero">
-  <div class="container">
-    <div class="kicker">Отчётность</div>
-    <h1>Расчёт КПД по отчёту.</h1>
-    <p class="lead">Вставьте отчёт в исходном формате — итог будет округлён до целого числа.</p>
+  <div class="container hero-grid">
+    <div>
+      <div class="kicker">Forks</div>
+      <h1>JournalTrace Fork.</h1>
+      <p class="lead">Спокойная тёмно-фиолетовая тема, нейтральные состояния меню, улучшенная читаемость дерева и таблиц, а также быстрые фильтры событий.</p>
+    </div>
+    <aside class="panel profile">
+      <small>Текущая версия</small>
+      <strong>JournalTrace</strong>
+      <div class="contact-list">
+        <a class="contact-link" href="../downloads/JournalTrace.exe" download>Скачать JournalTrace.exe</a>
+        <a class="contact-link" href="../source/JournalTrace/JournalTrace.csproj">Исходный проект</a>
+      </div>
+    </aside>
   </div>
 </section>
 <section class="section">
-  <div class="container report-grid">
-    <div class="panel report-card">
-      <h2>Введите отчёт</h2>
-      <p>Дата берётся из строки <b>#отчет ДД.ММ</b>.</p>
-      <textarea id="reportInput" placeholder="#отчет 22.12
-12 ban spec
-0 Усл.ЕД
-0 PVE
-3 PVP
-3 freeze
-4 revise
-0 doomsday
-0 inject
-0 clear B
-0 clear A
-2 4.4 WARN
-0 4.4 BAN
-2 4.5
-0 event-spec"></textarea>
-      <button class="calc-btn" id="calcBtn">Рассчитать КПД</button>
-      <div class="result" id="result">Здесь появится готовый результат.</div>
-    </div>
-    <div class="panel report-card">
-      <h2>Коэффициенты</h2>
-      <p>Неизвестные строки и event-spec не прибавляют КПД.</p>
-      <div class="weights">
-        <span>ban spec</span><span>1.0</span>
-        <span>Усл.ЕД</span><span>1.0</span>
-        <span>PVE</span><span>0.7</span>
-        <span>PVP</span><span>0.9</span>
-        <span>freeze</span><span>0.6</span>
-        <span>revise</span><span>1.1</span>
-        <span>doomsday</span><span>2.0</span>
-        <span>inject</span><span>6.0</span>
-        <span>clear B</span><span>0.75</span>
-        <span>clear A</span><span>1.25</span>
-        <span>clear method</span><span>2.4</span>
-        <span>4.4 WARN</span><span>0.2</span>
-        <span>4.4 BAN</span><span>2.5</span>
-        <span>4.5</span><span>0.0</span>
-      </div>
-    </div>
+  <div class="container two-col">
+    <article class="panel profile"><small>Интерфейс</small><strong>Нейтральные состояния</strong><p class="lead">Убраны резкие белые, голубые и ярко-синие подсветки у меню, выпадающих списков и кнопок.</p></article>
+    <article class="panel profile"><small>Data Grid</small><strong>Фильтры причин</strong><p class="lead">Добавлены переключатели File delete | Close, Rename:new name и Rename:old name справа от Information.</p></article>
+    <article class="panel profile"><small>Читаемость</small><strong>Дерево и таблицы</strong><p class="lead">Белый текст, тёмные поля ввода, спокойное выделение строк и системная тёмная стилизация полос прокрутки.</p></article>
+    <article class="panel profile"><small>Сборка</small><strong>Release EXE</strong><p class="lead">Запустите Build-JournalTrace.ps1 — готовый файл автоматически появится в downloads/JournalTrace.exe.</p></article>
   </div>
 </section>
 </main>
@@ -287,43 +261,6 @@ document.getElementById("menuBtn")?.addEventListener("click",()=>{
 document.getElementById("closeDrawer")?.addEventListener("click",closeDrawer);
 overlay?.addEventListener("click",closeDrawer);
 document.getElementById("year").textContent=new Date().getFullYear();
-
-const weights={
-  "banspec":1,"усл.ед":1,"pve":.7,"pvp":.9,"freeze":.6,"revise":1.1,
-  "doomsday":2,"inject":6,"clear beta":.75,"clear alpha":1.25,
-  "clear method":2.4,"warn 4.4":.2,"ban 4.4":2.5,"point45":0
-};
-function normalizeLabel(value){
-  let s=value.toLowerCase().trim().replace(/ё/g,"е").replace(/\s+/g," ");
-  if(s==="ban spec"||s==="banspec")return "banspec";
-  if(s==="усл ед"||s==="усл.ед")return "усл.ед";
-  if(s==="clear b"||s==="clear beta")return "clear beta";
-  if(s==="clear a"||s==="clear alpha")return "clear alpha";
-  if(s==="4.4 warn"||s==="warn 4.4")return "warn 4.4";
-  if(s==="4.4 ban"||s==="ban 4.4")return "ban 4.4";
-  if(s==="4.5"||s==="point45")return "point45";
-  return s;
-}
-document.getElementById("calcBtn")?.addEventListener("click",()=>{
-  const text=document.getElementById("reportInput").value.trim();
-  const dateMatch=text.match(/#отч[её]т\s+(\d{1,2}\.\d{1,2})/i);
-  const result=document.getElementById("result");
-  if(!dateMatch){
-    result.textContent="Не найдена дата в формате #отчет ДД.ММ";
-    return;
-  }
-  let total=0;
-  text.split(/\r?\n/).forEach(line=>{
-    const match=line.trim().match(/^(-?\d+(?:[.,]\d+)?)\s+(.+)$/);
-    if(!match)return;
-    const key=normalizeLabel(match[2]);
-    if(Object.prototype.hasOwnProperty.call(weights,key)){
-      total+=parseFloat(match[1].replace(",","."))*weights[key];
-    }
-  });
-  const rounded=Math.round(total);
-  result.textContent=`КПД за ${dateMatch[1]} рассчитан и равен ${rounded}`;
-});
 </script>
 </body>
 </html>
