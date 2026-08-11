@@ -20,7 +20,7 @@
 *{box-sizing:border-box}
 body{
   margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+  font-family:var(--font-body,Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif);
   transition:.25s background,.25s color
 }
 button,input{font:inherit}
@@ -57,7 +57,7 @@ button,input{font:inherit}
     <p class="login-sub">Доступ к сайту защищён паролем. При входе сессия привязывается к вашему IP-адресу и сохраняется 5 дней — при смене сети пароль потребуется снова.</p>
     <div class="login-field">
       <label for="pass">Пароль</label>
-      <input type="password" id="pass" name="pass" placeholder="••••••" autocomplete="current-password" autofocus>
+      <input type="password" id="pass" name="pass" placeholder="Введите пароль" autocomplete="current-password" autofocus>
     </div>
     <button type="submit" class="login-btn" id="loginBtn">Войти</button>
     <div class="login-error" id="loginError">Неверный пароль. Попробуйте ещё раз.</div>
@@ -89,19 +89,68 @@ button,input{font:inherit}
   const btn=document.getElementById("loginBtn");
   const err=document.getElementById("loginError");
 
+  let lockTimer=null;
+
+  function formatRemaining(ms){
+    const total=Math.max(0,Math.ceil(ms/1000));
+    const m=Math.floor(total/60);
+    const s=total%60;
+    return m+":"+(s<10?"0":"")+s;
+  }
+
+  function applyLock(state){
+    if(lockTimer){ clearInterval(lockTimer); lockTimer=null; }
+    if(!state.locked){
+      input.disabled=false;
+      btn.disabled=false;
+      btn.textContent="Войти";
+      return;
+    }
+    input.disabled=true;
+    btn.disabled=true;
+    err.textContent="Слишком много неверных попыток. Попробуйте снова через "+formatRemaining(state.remainingMs)+".";
+    err.classList.add("show");
+    lockTimer=setInterval(function(){
+      const s=WTPAuth.lockState();
+      if(!s.locked){
+        clearInterval(lockTimer);
+        lockTimer=null;
+        input.disabled=false;
+        btn.disabled=false;
+        btn.textContent="Войти";
+        err.classList.remove("show");
+        err.textContent="Неверный пароль. Попробуйте ещё раз.";
+        input.focus();
+        return;
+      }
+      err.textContent="Слишком много неверных попыток. Попробуйте снова через "+formatRemaining(s.remainingMs)+".";
+    },1000);
+  }
+
+  applyLock(WTPAuth.lockState());
+
   form.addEventListener("submit",function(e){
     e.preventDefault();
+    const initial=WTPAuth.lockState();
+    if(initial.locked){ applyLock(initial); return; }
     const val=input.value;
     if(!val) return;
     btn.disabled=true;
     btn.textContent="Проверка…";
     err.classList.remove("show");
-    WTPAuth.login(val).then(function(ok){
-      if(ok){
+    err.textContent="Неверный пароль. Попробуйте ещё раз.";
+    WTPAuth.login(val).then(function(state){
+      if(state.ok){
         location.href=WTPAuth.safeNext(params().get("next"));
+      }else if(state.locked){
+        input.value="";
+        applyLock(state);
       }else{
         btn.disabled=false;
         btn.textContent="Войти";
+        if(state.attemptsLeft!=null && state.attemptsLeft<=2 && state.attemptsLeft>0){
+          err.textContent="Неверный пароль. Осталось попыток: "+state.attemptsLeft+".";
+        }
         err.classList.add("show");
         input.value="";
         input.focus();

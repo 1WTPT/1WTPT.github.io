@@ -12,6 +12,9 @@
     "https://api.ipify.org?format=json",
     "https://api64.ipify.org?format=json"
   ];
+  var FAIL_KEY="wtp_auth_fail_v1";
+  var MAX_ATTEMPTS=5;
+  var LOCKOUT_MS=5*60*1000; // 5 минут
 
   function bufToHex(buf){
     var bytes=new Uint8Array(buf),hex="";
@@ -92,13 +95,68 @@
     return sha256Hex(entered).then(function(hash){ return hash===PASS_HASH; });
   }
 
-  /* Успешный вход: сохраняет привязку к текущему IP на 5 дней. */
+  /* ===== Защита от подбора пароля: 5 неверных попыток блокируют
+     форму входа на 5 минут. Счётчик хранится в localStorage. ===== */
+  function readFails(){
+    try{
+      var raw=localStorage.getItem(FAIL_KEY);
+      if(!raw) return {count:0,lockUntil:0};
+      var obj=JSON.parse(raw);
+      if(!obj || typeof obj.count!=="number") return {count:0,lockUntil:0};
+      return {count:obj.count||0,lockUntil:obj.lockUntil||0};
+    }catch(e){ return {count:0,lockUntil:0}; }
+  }
+
+  function writeFails(state){
+    try{ localStorage.setItem(FAIL_KEY,JSON.stringify(state)); }catch(e){}
+  }
+
+  /* Возвращает {locked, remainingMs, attemptsLeft}. Если время блокировки
+     истекло — автоматически сбрасывает счётчик попыток. */
+  function lockState(){
+    var state=readFails();
+    if(state.lockUntil && Date.now()>=state.lockUntil){
+      state={count:0,lockUntil:0};
+      writeFails(state);
+    }
+    var locked=!!(state.lockUntil && Date.now()<state.lockUntil);
+    return {
+      locked:locked,
+      remainingMs:locked?(state.lockUntil-Date.now()):0,
+      attemptsLeft:Math.max(0,MAX_ATTEMPTS-state.count)
+    };
+  }
+
+  function registerFailure(){
+    var state=readFails();
+    if(state.lockUntil && Date.now()<state.lockUntil) return lockState();
+    state.count=(state.count||0)+1;
+    if(state.count>=MAX_ATTEMPTS){
+      state.lockUntil=Date.now()+LOCKOUT_MS;
+    }
+    writeFails(state);
+    return lockState();
+  }
+
+  function registerSuccess(){
+    writeFails({count:0,lockUntil:0});
+  }
+
+  /* Успешный вход: сохраняет привязку к текущему IP на 5 дней.
+     Возвращает объект {ok, locked, remainingMs, attemptsLeft}. */
   function login(entered){
+    var pre=lockState();
+    if(pre.locked) return Promise.resolve(pre);
     return checkPassword(entered).then(function(ok){
-      if(!ok) return false;
+      if(!ok){
+        var state=registerFailure();
+        state.ok=false;
+        return state;
+      }
+      registerSuccess();
       return fetchIP().then(function(ip){
         writeAuth(ip || "unknown");
-        return true;
+        return {ok:true,locked:false,remainingMs:0,attemptsLeft:MAX_ATTEMPTS};
       });
     });
   }
@@ -116,6 +174,7 @@
     clearAuth:clearAuth,
     reveal:reveal,
     safeNext:safeNext,
-    fetchIP:fetchIP
+    fetchIP:fetchIP,
+    lockState:lockState
   };
 })(window);

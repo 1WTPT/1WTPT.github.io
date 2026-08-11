@@ -8,63 +8,87 @@ noscript.auth-noscript{
 }
 
 /* ================= ПАЛИТРЫ — СВЕТЛЫЕ ================= */
+[data-variant=ocean]{
+  --bg:#f6f8fc;--panel:#fff;--text:#0a1020;--muted:#6b7484;--line:#e0e6ef;
+  --blue:#1769e0;--blue2:#0f57bf;--soft:#eef4ff;
+  --shadow:0 18px 55px rgba(24,39,69,.08);--head:rgba(246,248,252,.86);
+  --radius-card:22px;--radius-btn:12px;--radius-sm:13px;--h1-space:-.035em;
+  --font-head:"Helvetica Neue",Arial,-apple-system,sans-serif;
+  --font-body:Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif
+}
 [data-variant=sunrise]{
   --bg:#fff8f3;--panel:#ffffff;--text:#241608;--muted:#8a6a52;--line:#f3ddc9;
   --blue:#ef6a2f;--blue2:#d9551d;--soft:#fff0e3;
   --shadow:0 18px 55px rgba(120,60,20,.12);--head:rgba(255,248,243,.86);
-  --radius-card:26px;--radius-btn:999px;--radius-sm:20px;
-  --font-head:"Segoe UI Rounded","SF Pro Rounded",Verdana,-apple-system,sans-serif
+  --radius-card:26px;--radius-btn:999px;--radius-sm:20px;--h1-space:-.01em;
+  --font-head:"Segoe UI Rounded","SF Pro Rounded","Varela Round",Verdana,sans-serif;
+  --font-body:"Segoe UI Rounded","SF Pro Rounded","Varela Round",Verdana,-apple-system,sans-serif
 }
 [data-variant=mint]{
   --bg:#f4fbf7;--panel:#ffffff;--text:#0c1f16;--muted:#5c7a6c;--line:#d9ece1;
   --blue:#17a06b;--blue2:#0f8256;--soft:#e7f7ef;
   --shadow:0 18px 55px rgba(15,90,60,.10);--head:rgba(244,251,247,.86);
-  --radius-card:16px;--radius-btn:10px;--radius-sm:10px;
-  --font-head:"Avenir Next","Century Gothic",Futura,-apple-system,sans-serif
+  --radius-card:16px;--radius-btn:10px;--radius-sm:10px;--h1-space:-.03em;
+  --font-head:"Century Gothic","Avenir Next",Futura,sans-serif;
+  --font-body:"Avenir Next","Century Gothic",Futura,-apple-system,sans-serif
 }
 [data-variant=lavender]{
   --bg:#faf8ff;--panel:#ffffff;--text:#1c1730;--muted:#786f96;--line:#e6e0f7;
   --blue:#8352d9;--blue2:#6d3fc0;--soft:#f1ebff;
   --shadow:0 18px 55px rgba(60,30,120,.11);--head:rgba(250,248,255,.86);
-  --radius-card:18px;--radius-btn:14px;--radius-sm:14px;
-  --font-head:Georgia,"Iowan Old Style","Times New Roman",serif
+  --radius-card:18px;--radius-btn:14px;--radius-sm:14px;--h1-space:0em;
+  --font-head:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --font-body:Georgia,"Iowan Old Style","Palatino Linotype","Times New Roman",serif
 }
 [data-variant=slate]{
   --bg:#f5f6f8;--panel:#ffffff;--text:#12161c;--muted:#5b6472;--line:#dde1e7;
   --blue:#4b5563;--blue2:#374151;--soft:#eceef1;
   --shadow:0 18px 55px rgba(20,25,35,.10);--head:rgba(245,246,248,.86);
-  --radius-card:6px;--radius-btn:4px;--radius-sm:4px;
-  --font-head:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace
+  --radius-card:6px;--radius-btn:4px;--radius-sm:4px;--h1-space:-.05em;
+  --font-head:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --font-body:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Courier New",monospace
 }
 
 /* ================= ПАЛИТРЫ — ТЁМНЫЕ ================= */
+[data-variant=midnight]{
+  --bg:#090d14;--panel:#111722;--text:#f5f7fb;--muted:#9ba7b9;--line:#263044;
+  --blue:#4388f7;--blue2:#67a0fa;--soft:#17243a;
+  --shadow:0 18px 55px rgba(0,0,0,.30);--head:rgba(9,13,20,.86);
+  --radius-card:10px;--radius-btn:8px;--radius-sm:8px;--h1-space:-.04em;
+  --font-head:"Segoe UI Semibold","Arial Narrow","Helvetica Neue",sans-serif;
+  --font-body:"Segoe UI","Helvetica Neue",Arial,-apple-system,sans-serif
+}
 [data-variant=ember]{
   --bg:#150d09;--panel:#1e140d;--text:#fbf1e8;--muted:#c9a084;--line:#3a2417;
   --blue:#ff8552;--blue2:#ffa06e;--soft:#2b1a10;
   --shadow:0 18px 55px rgba(0,0,0,.38);--head:rgba(21,13,9,.86);
-  --radius-card:26px;--radius-btn:999px;--radius-sm:20px;
-  --font-head:"Segoe UI Rounded","SF Pro Rounded",Verdana,-apple-system,sans-serif
+  --radius-card:8px;--radius-btn:6px;--radius-sm:6px;--h1-space:-.01em;
+  --font-head:"Rockwell","Charter","Georgia",serif;
+  --font-body:"Charter","Georgia","Iowan Old Style",serif
 }
 [data-variant=forest]{
   --bg:#081410;--panel:#0f1e18;--text:#eafbf2;--muted:#8fb3a1;--line:#1c3529;
   --blue:#3ddc84;--blue2:#2ebd6d;--soft:#122a20;
   --shadow:0 18px 55px rgba(0,0,0,.38);--head:rgba(8,20,16,.86);
-  --radius-card:16px;--radius-btn:10px;--radius-sm:10px;
-  --font-head:"Avenir Next","Century Gothic",Futura,-apple-system,sans-serif
+  --radius-card:30px;--radius-btn:999px;--radius-sm:22px;--h1-space:-.02em;
+  --font-head:"Optima","Candara","Segoe UI",sans-serif;
+  --font-body:"Candara","Optima","Segoe UI",-apple-system,sans-serif
 }
 [data-variant=neon]{
   --bg:#0c0716;--panel:#160f26;--text:#f6ecff;--muted:#b79fd6;--line:#2c1e46;
   --blue:#d68bff;--blue2:#c064ff;--soft:#20153a;
   --shadow:0 18px 60px rgba(140,50,255,.25);--head:rgba(12,7,22,.86);
-  --radius-card:18px;--radius-btn:14px;--radius-sm:14px;
-  --font-head:Georgia,"Iowan Old Style","Times New Roman",serif
+  --radius-card:2px;--radius-btn:2px;--radius-sm:2px;--h1-space:.03em;
+  --font-head:"Bahnschrift","DIN Alternate","Arial Narrow",sans-serif;
+  --font-body:"DIN Alternate","Bahnschrift","Arial Narrow",sans-serif
 }
 [data-variant=graphite]{
   --bg:#101114;--panel:#17191d;--text:#eef0f3;--muted:#98a1ad;--line:#282c33;
   --blue:#9aa5b8;--blue2:#c3cbd6;--soft:#1d2026;
   --shadow:0 18px 55px rgba(0,0,0,.42);--head:rgba(16,17,20,.86);
-  --radius-card:6px;--radius-btn:4px;--radius-sm:4px;
-  --font-head:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace
+  --radius-card:6px;--radius-btn:4px;--radius-sm:4px;--h1-space:-.06em;
+  --font-head:"Cascadia Code","Consolas","Courier New",monospace;
+  --font-body:"Cascadia Code","Consolas","Courier New",monospace
 }
 
 /* ================= Кнопка палитры и выпадающее меню ================= */

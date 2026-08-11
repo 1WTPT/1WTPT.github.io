@@ -20,7 +20,7 @@
 html{scroll-behavior:smooth}
 body{
   margin:0;background:var(--bg);color:var(--text);
-  font-family:Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+  font-family:var(--font-body,Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif);
   transition:.25s background,.25s color
 }
 button,input,textarea{font:inherit}
@@ -69,7 +69,7 @@ header{
 .kicker{color:var(--blue);font-size:13px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
 h1{
   margin:22px 0 26px;font-size:clamp(52px,8vw,96px);line-height:1.05;
-  letter-spacing:-.035em;word-spacing:.16em;font-family:var(--font-head)
+  letter-spacing:var(--h1-space,-.035em);word-spacing:.16em;font-family:var(--font-head)
 }
 .lead{max-width:760px;margin:0;color:var(--muted);font-size:19px;line-height:1.7}
 .panel,.card{
@@ -138,8 +138,17 @@ textarea{
   margin-top:14px;padding:18px;border-radius:16px;background:var(--soft);
   font-size:20px;font-weight:900;line-height:1.45
 }
-.weights{display:grid;grid-template-columns:1fr auto;gap:9px 16px;margin-top:18px;font-size:14px}
-.weights span:nth-child(even){font-weight:900;color:var(--blue)}
+.weights{display:grid;grid-template-columns:1fr auto;gap:9px 16px;margin-top:18px;font-size:14px;align-items:center}
+.weights input{
+  width:82px;height:32px;padding:0 8px;border:1px solid var(--line);border-radius:8px;
+  background:var(--bg);color:var(--blue);font-weight:900;font-size:14px;text-align:right;outline:none
+}
+.weights input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(23,105,224,.12)}
+.reset-weights{
+  height:38px;padding:0 14px;margin-top:16px;border:1px solid var(--line);border-radius:var(--radius-btn,10px);
+  background:transparent;color:var(--muted);font-weight:800;font-size:13px;cursor:pointer
+}
+.reset-weights:hover{color:var(--text);border-color:var(--muted)}
 .hidden{display:none}
 footer{border-top:1px solid var(--line);color:var(--muted)}
 .foot{min-height:88px;display:flex;justify-content:space-between;align-items:center;gap:18px}
@@ -230,23 +239,24 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
     </div>
     <div class="panel report-card">
       <h2>Коэффициенты</h2>
-      <p>Неизвестные строки и event-spec не прибавляют КПД.</p>
-      <div class="weights">
-        <span>ban spec</span><span>1.0</span>
-        <span>Усл.ЕД</span><span>1.0</span>
-        <span>PVE</span><span>0.7</span>
-        <span>PVP</span><span>0.9</span>
-        <span>freeze</span><span>0.6</span>
-        <span>revise</span><span>1.1</span>
-        <span>doomsday</span><span>2.0</span>
-        <span>inject</span><span>6.0</span>
-        <span>clear B</span><span>0.75</span>
-        <span>clear A</span><span>1.25</span>
-        <span>clear method</span><span>2.4</span>
-        <span>4.4 WARN</span><span>0.2</span>
-        <span>4.4 BAN</span><span>2.5</span>
-        <span>4.5</span><span>0.0</span>
+      <p>Неизвестные строки и event-spec не прибавляют КПД. Значения можно редактировать — они сохраняются в этом браузере.</p>
+      <div class="weights" id="weights">
+        <span>ban spec</span><input type="number" step="0.01" inputmode="decimal" data-key="banspec">
+        <span>Усл.ЕД</span><input type="number" step="0.01" inputmode="decimal" data-key="усл.ед">
+        <span>PVE</span><input type="number" step="0.01" inputmode="decimal" data-key="pve">
+        <span>PVP</span><input type="number" step="0.01" inputmode="decimal" data-key="pvp">
+        <span>freeze</span><input type="number" step="0.01" inputmode="decimal" data-key="freeze">
+        <span>revise</span><input type="number" step="0.01" inputmode="decimal" data-key="revise">
+        <span>doomsday</span><input type="number" step="0.01" inputmode="decimal" data-key="doomsday">
+        <span>inject</span><input type="number" step="0.01" inputmode="decimal" data-key="inject">
+        <span>clear B</span><input type="number" step="0.01" inputmode="decimal" data-key="clear beta">
+        <span>clear A</span><input type="number" step="0.01" inputmode="decimal" data-key="clear alpha">
+        <span>clear method</span><input type="number" step="0.01" inputmode="decimal" data-key="clear method">
+        <span>4.4 WARN</span><input type="number" step="0.01" inputmode="decimal" data-key="warn 4.4">
+        <span>4.4 BAN</span><input type="number" step="0.01" inputmode="decimal" data-key="ban 4.4">
+        <span>4.5</span><input type="number" step="0.01" inputmode="decimal" data-key="point45">
       </div>
+      <button type="button" class="reset-weights" id="resetWeights">Сбросить по умолчанию</button>
     </div>
   </div>
 </section>
@@ -297,11 +307,49 @@ document.getElementById("closeDrawer")?.addEventListener("click",closeDrawer);
 overlay?.addEventListener("click",closeDrawer);
 document.getElementById("year").textContent=new Date().getFullYear();
 
-const weights={
+const DEFAULT_WEIGHTS={
   "banspec":1,"усл.ед":1,"pve":.7,"pvp":.9,"freeze":.6,"revise":1.1,
   "doomsday":2,"inject":6,"clear beta":.75,"clear alpha":1.25,
   "clear method":2.4,"warn 4.4":.2,"ban 4.4":2.5,"point45":0
 };
+const WEIGHTS_KEY="wtp_report_weights";
+function loadWeights(){
+  try{
+    const raw=localStorage.getItem(WEIGHTS_KEY);
+    if(!raw) return Object.assign({},DEFAULT_WEIGHTS);
+    const saved=JSON.parse(raw);
+    return Object.assign({},DEFAULT_WEIGHTS,saved&&typeof saved==="object"?saved:{});
+  }catch(e){ return Object.assign({},DEFAULT_WEIGHTS); }
+}
+function saveWeights(w){
+  try{ localStorage.setItem(WEIGHTS_KEY,JSON.stringify(w)); }catch(e){}
+}
+let weights=loadWeights();
+const weightInputs=document.querySelectorAll("#weights input[data-key]");
+function renderWeightInputs(){
+  weightInputs.forEach(inp=>{
+    const key=inp.dataset.key;
+    const val=(weights[key]!=null?weights[key]:DEFAULT_WEIGHTS[key]);
+    inp.value=val;
+  });
+}
+renderWeightInputs();
+weightInputs.forEach(inp=>{
+  inp.addEventListener("change",()=>{
+    const key=inp.dataset.key;
+    const parsed=parseFloat(String(inp.value).replace(",","."));
+    weights[key]=isNaN(parsed)?DEFAULT_WEIGHTS[key]:parsed;
+    inp.value=weights[key];
+    saveWeights(weights);
+    notify("Коэффициент сохранён");
+  });
+});
+document.getElementById("resetWeights")?.addEventListener("click",()=>{
+  weights=Object.assign({},DEFAULT_WEIGHTS);
+  saveWeights(weights);
+  renderWeightInputs();
+  notify("Коэффициенты сброшены");
+});
 function normalizeLabel(value){
   let s=value.toLowerCase().trim().replace(/ё/g,"е").replace(/\s+/g," ");
   if(s==="ban spec"||s==="banspec")return "banspec";
