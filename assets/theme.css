@@ -1,0 +1,127 @@
+/* ===== 1WantToPiglet — общая тема, палитра и стили экрана логина ===== */
+
+/* Скрываем страницу до завершения проверки авторизации (снимается auth.js) */
+.auth-pending{visibility:hidden}
+noscript.auth-noscript{
+  position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  background:#0a1020;color:#f5f7fb;font:15px/1.6 Inter,Roboto,-apple-system,sans-serif;text-align:center;padding:24px
+}
+
+/* ================= ПАЛИТРЫ — СВЕТЛЫЕ ================= */
+[data-variant=sunrise]{
+  --bg:#fff8f3;--panel:#ffffff;--text:#241608;--muted:#8a6a52;--line:#f3ddc9;
+  --blue:#ef6a2f;--blue2:#d9551d;--soft:#fff0e3;
+  --shadow:0 18px 55px rgba(120,60,20,.12);--head:rgba(255,248,243,.86);
+  --radius-card:26px;--radius-btn:999px;--radius-sm:20px;
+  --font-head:"Segoe UI Rounded","SF Pro Rounded",Verdana,-apple-system,sans-serif
+}
+[data-variant=mint]{
+  --bg:#f4fbf7;--panel:#ffffff;--text:#0c1f16;--muted:#5c7a6c;--line:#d9ece1;
+  --blue:#17a06b;--blue2:#0f8256;--soft:#e7f7ef;
+  --shadow:0 18px 55px rgba(15,90,60,.10);--head:rgba(244,251,247,.86);
+  --radius-card:16px;--radius-btn:10px;--radius-sm:10px;
+  --font-head:"Avenir Next","Century Gothic",Futura,-apple-system,sans-serif
+}
+[data-variant=lavender]{
+  --bg:#faf8ff;--panel:#ffffff;--text:#1c1730;--muted:#786f96;--line:#e6e0f7;
+  --blue:#8352d9;--blue2:#6d3fc0;--soft:#f1ebff;
+  --shadow:0 18px 55px rgba(60,30,120,.11);--head:rgba(250,248,255,.86);
+  --radius-card:18px;--radius-btn:14px;--radius-sm:14px;
+  --font-head:Georgia,"Iowan Old Style","Times New Roman",serif
+}
+[data-variant=slate]{
+  --bg:#f5f6f8;--panel:#ffffff;--text:#12161c;--muted:#5b6472;--line:#dde1e7;
+  --blue:#4b5563;--blue2:#374151;--soft:#eceef1;
+  --shadow:0 18px 55px rgba(20,25,35,.10);--head:rgba(245,246,248,.86);
+  --radius-card:6px;--radius-btn:4px;--radius-sm:4px;
+  --font-head:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace
+}
+
+/* ================= ПАЛИТРЫ — ТЁМНЫЕ ================= */
+[data-variant=ember]{
+  --bg:#150d09;--panel:#1e140d;--text:#fbf1e8;--muted:#c9a084;--line:#3a2417;
+  --blue:#ff8552;--blue2:#ffa06e;--soft:#2b1a10;
+  --shadow:0 18px 55px rgba(0,0,0,.38);--head:rgba(21,13,9,.86);
+  --radius-card:26px;--radius-btn:999px;--radius-sm:20px;
+  --font-head:"Segoe UI Rounded","SF Pro Rounded",Verdana,-apple-system,sans-serif
+}
+[data-variant=forest]{
+  --bg:#081410;--panel:#0f1e18;--text:#eafbf2;--muted:#8fb3a1;--line:#1c3529;
+  --blue:#3ddc84;--blue2:#2ebd6d;--soft:#122a20;
+  --shadow:0 18px 55px rgba(0,0,0,.38);--head:rgba(8,20,16,.86);
+  --radius-card:16px;--radius-btn:10px;--radius-sm:10px;
+  --font-head:"Avenir Next","Century Gothic",Futura,-apple-system,sans-serif
+}
+[data-variant=neon]{
+  --bg:#0c0716;--panel:#160f26;--text:#f6ecff;--muted:#b79fd6;--line:#2c1e46;
+  --blue:#d68bff;--blue2:#c064ff;--soft:#20153a;
+  --shadow:0 18px 60px rgba(140,50,255,.25);--head:rgba(12,7,22,.86);
+  --radius-card:18px;--radius-btn:14px;--radius-sm:14px;
+  --font-head:Georgia,"Iowan Old Style","Times New Roman",serif
+}
+[data-variant=graphite]{
+  --bg:#101114;--panel:#17191d;--text:#eef0f3;--muted:#98a1ad;--line:#282c33;
+  --blue:#9aa5b8;--blue2:#c3cbd6;--soft:#1d2026;
+  --shadow:0 18px 55px rgba(0,0,0,.42);--head:rgba(16,17,20,.86);
+  --radius-card:6px;--radius-btn:4px;--radius-sm:4px;
+  --font-head:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace
+}
+
+/* ================= Кнопка палитры и выпадающее меню ================= */
+.palette-wrap{position:relative}
+.palette-menu{
+  position:absolute;right:0;top:calc(100% + 10px);min-width:216px;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--shadow);padding:10px;display:grid;gap:4px;
+  opacity:0;pointer-events:none;transform:translateY(-6px) scale(.98);
+  transition:.16s ease;z-index:60
+}
+.palette-menu.open{opacity:1;pointer-events:auto;transform:none}
+.palette-menu-label{
+  padding:8px 10px 6px;font-size:11px;font-weight:900;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted)
+}
+.palette-item{
+  display:flex;align-items:center;gap:11px;padding:10px 11px;border-radius:12px;
+  border:1px solid transparent;background:transparent;color:var(--text);
+  font-weight:700;font-size:14.5px;cursor:pointer;text-align:left;width:100%
+}
+.palette-item:hover{background:var(--soft)}
+.palette-item.active{border-color:var(--blue);background:var(--soft)}
+.palette-dot{
+  width:15px;height:15px;border-radius:50%;flex:none;
+  box-shadow:0 0 0 3px rgba(127,127,127,.12) inset,0 0 0 1px rgba(0,0,0,.05)
+}
+@media(max-width:600px){.palette-menu{right:-46px;min-width:198px}}
+
+/* ================= Экран логина ================= */
+.login-shell{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px
+}
+.login-card{
+  width:min(400px,100%);padding:34px 30px;border:1px solid var(--line);
+  border-radius:var(--radius-card,22px);background:var(--panel);box-shadow:var(--shadow)
+}
+.login-brand{font-size:22px;font-weight:900;letter-spacing:-.04em;margin-bottom:4px}
+.login-brand b{color:var(--blue)}
+.login-sub{color:var(--muted);font-size:14.5px;margin:0 0 26px;line-height:1.55}
+.login-field{margin-bottom:16px}
+.login-field label{display:block;font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em}
+.login-field input{
+  width:100%;height:50px;padding:0 16px;border:1px solid var(--line);
+  border-radius:var(--radius-sm,13px);background:var(--bg);color:var(--text);outline:none;font-size:16px
+}
+.login-field input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(23,105,224,.13)}
+.login-btn{
+  width:100%;height:50px;border:0;border-radius:var(--radius-btn,12px);background:var(--blue);
+  color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:6px
+}
+.login-btn:hover{background:var(--blue2)}
+.login-btn[disabled]{opacity:.6;cursor:progress}
+.login-error{
+  margin-top:14px;padding:12px 14px;border-radius:var(--radius-sm,12px);
+  background:rgba(220,60,60,.12);color:#c33;font-weight:700;font-size:13.5px;display:none
+}
+.login-error.show{display:block}
+.login-foot{margin-top:22px;color:var(--muted);font-size:12.5px;text-align:center}
+.login-topbar{position:fixed;top:16px;right:16px;display:flex;gap:8px}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" class="auth-pending">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -31,11 +31,11 @@ header{
   border-bottom:1px solid var(--line);backdrop-filter:blur(18px)
 }
 .nav{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.brand{font-size:20px;font-weight:900;letter-spacing:-.045em}
+.brand{font-size:20px;font-weight:900;letter-spacing:-.045em;font-family:var(--font-head)}
 .brand b{color:var(--blue)}
 .actions{display:flex;gap:10px}
 .primary,.theme,.menu-btn{
-  height:44px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center
+  height:44px;border-radius:var(--radius-btn,12px);display:inline-flex;align-items:center;justify-content:center
 }
 .primary{padding:0 17px;background:var(--blue);color:white;font-weight:800;border:0;cursor:pointer}
 .primary:hover,.copy:hover,.mini-copy:hover,.calc-btn:hover{background:var(--blue2)}
@@ -55,7 +55,7 @@ header{
 .drawer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
 .drawer nav{display:grid;gap:10px}
 .nav-item{
-  width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;
+  width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius-sm,14px);
   background:transparent;color:var(--text);font-weight:800;text-align:left
 }
 .nav-item.active{background:var(--blue);color:#fff;border-color:var(--blue)}
@@ -69,18 +69,18 @@ header{
 .kicker{color:var(--blue);font-size:13px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
 h1{
   margin:22px 0 26px;font-size:clamp(52px,8vw,96px);line-height:1.05;
-  letter-spacing:-.035em;word-spacing:.16em
+  letter-spacing:-.035em;word-spacing:.16em;font-family:var(--font-head)
 }
 .lead{max-width:760px;margin:0;color:var(--muted);font-size:19px;line-height:1.7}
 .panel,.card{
-  border:1px solid var(--line);border-radius:22px;background:var(--panel);box-shadow:var(--shadow)
+  border:1px solid var(--line);border-radius:var(--radius-card,22px);background:var(--panel);box-shadow:var(--shadow)
 }
 .profile{padding:26px}
 .profile small{color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.11em}
 .profile strong{display:block;margin:12px 0 10px;font-size:26px}
 .contact-list{display:grid;gap:10px}
 .contact-link{
-  padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:var(--soft);
+  padding:13px 14px;border:1px solid var(--line);border-radius:var(--radius-sm,13px);background:var(--soft);
   color:var(--blue);font-weight:800;overflow-wrap:anywhere
 }
 .section{padding:24px 0 88px}
@@ -90,7 +90,7 @@ h1{
 .toolbar{display:flex;gap:12px;margin-bottom:20px}
 .search{
   width:100%;height:52px;padding:0 18px;border:1px solid var(--line);
-  border-radius:14px;background:var(--panel);color:var(--text);outline:none
+  border-radius:var(--radius-sm,14px);background:var(--panel);color:var(--text);outline:none
 }
 .search:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(23,105,224,.12)}
 .cards{display:grid;gap:18px}
@@ -105,9 +105,9 @@ h1{
   display:grid;place-items:center;width:38px;height:38px;border-radius:11px;
   background:var(--soft);color:var(--blue);font-weight:900
 }
-h2{margin:0;font-size:20px;letter-spacing:-.025em}
+h2{margin:0;font-size:20px;letter-spacing:-.025em;font-family:var(--font-head)}
 .copy,.calc-btn{
-  height:42px;padding:0 16px;border:0;border-radius:11px;
+  height:42px;padding:0 16px;border:0;border-radius:var(--radius-btn,11px);
   background:var(--blue);color:white;font-weight:800;cursor:pointer
 }
 pre{
@@ -117,7 +117,7 @@ pre{
 .mini-list{display:grid;gap:10px;padding:18px}
 .mini-row{
   display:grid;grid-template-columns:1fr 42px;gap:10px;align-items:center;
-  padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--soft)
+  padding:12px;border:1px solid var(--line);border-radius:var(--radius-sm,13px);background:var(--soft)
 }
 .mini-row code{font:12.5px/1.55 "SFMono-Regular",Consolas,monospace;overflow-wrap:anywhere}
 .mini-copy{
@@ -156,23 +156,32 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
   .foot{flex-direction:column;align-items:flex-start;justify-content:center}
 }
 </style>
+<link rel="stylesheet" href="../assets/theme.css">
 
 <script>
 (()=>{
-  const saved=localStorage.getItem("theme");
-  const dark=matchMedia("(prefers-color-scheme:dark)").matches;
-  document.documentElement.dataset.theme=saved||(dark?"dark":"light");
+  const mode=localStorage.getItem("theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  document.documentElement.dataset.theme=mode;
+  const variants={light:["ocean","sunrise","mint","lavender","slate"],dark:["midnight","ember","forest","neon","graphite"]};
+  let variant=localStorage.getItem("themeVariant");
+  if(!variants[mode].includes(variant)) variant=(mode==="dark"?"midnight":"ocean");
+  document.documentElement.dataset.variant=variant;
 })();
 </script>
 
 </head>
 <body>
+<noscript><div class="auth-noscript">Для входа на сайт требуется JavaScript.</div></noscript>
 <header>
   <div class="container nav">
     <button class="menu-btn" id="menuBtn" aria-label="Открыть меню"><span></span></button>
     <a class="brand" href="../home/"><b>1</b>WantToPiglet</a>
     <div class="actions">
       <a class="primary desktop-only" href="https://vk.ru/basatkl" target="_blank" rel="noopener">Написать</a>
+      <div class="palette-wrap">
+        <button class="theme" id="palette" aria-label="Выбрать тему" aria-haspopup="true">🎨</button>
+        <div class="palette-menu" id="paletteMenu" role="menu"></div>
+      </div>
       <button class="theme" id="theme" aria-label="Сменить тему">◐</button>
     </div>
   </div>
@@ -184,6 +193,7 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
     <a class="nav-item " href="../filters/">Filters</a>
     <a class="nav-item active" href="../forks/">Forks</a>
     <a class="nav-item " href="../otchet/">Отчётность</a>
+    <button type="button" class="nav-item" id="logoutBtn">Выйти</button>
   </nav>
 </aside>
 <div class="overlay" id="overlay"></div>
@@ -217,8 +227,11 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
 </main>
 <footer><div class="container foot"><span>© <span id="year"></span> 1WantToPiglet</span><span>Utilities & profile</span></div></footer>
 <div class="toast" id="toast">Скопировано</div>
+<script src="../assets/theme.js"></script>
+<script src="../assets/auth.js"></script>
 <script>
 const root=document.documentElement;
+WTPAuth.guard();
 const toast=document.getElementById("toast");
 const notify=t=>{
   if(!toast)return;
@@ -241,13 +254,9 @@ document.querySelectorAll("[data-copy]").forEach(btn=>{
     notify(await copyText(btn.dataset.copy)?"Скопировано":"Ошибка копирования");
   });
 });
-const themeButton=document.getElementById("theme");
-if(themeButton){
-  themeButton.onclick=()=>{
-    const next=root.dataset.theme==="dark"?"light":"dark";
-    root.dataset.theme=next;localStorage.setItem("theme",next);
-  };
-}
+document.getElementById("logoutBtn")?.addEventListener("click",()=>{
+  WTPAuth.logout();
+});
 const drawer=document.getElementById("drawer");
 const overlay=document.getElementById("overlay");
 const closeDrawer=()=>{

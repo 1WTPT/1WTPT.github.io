@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru" class="auth-pending">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="1WantToPiglet — вход">
+<title>Вход — 1WantToPiglet</title>
+<style>
+:root{
+  --bg:#f6f8fc;--panel:#fff;--text:#0a1020;--muted:#6b7484;--line:#e0e6ef;
+  --blue:#1769e0;--blue2:#0f57bf;--soft:#eef4ff;
+  --shadow:0 18px 55px rgba(24,39,69,.08);--head:rgba(246,248,252,.86)
+}
+[data-theme=dark]{
+  --bg:#090d14;--panel:#111722;--text:#f5f7fb;--muted:#9ba7b9;--line:#263044;
+  --blue:#4388f7;--blue2:#67a0fa;--soft:#17243a;
+  --shadow:0 18px 55px rgba(0,0,0,.30);--head:rgba(9,13,20,.86)
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+  transition:.25s background,.25s color
+}
+button,input{font:inherit}
+.theme,.palette-wrap .theme{
+  width:44px;height:44px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--text);cursor:pointer;display:inline-flex;
+  align-items:center;justify-content:center
+}
+</style>
+<link rel="stylesheet" href="../assets/theme.css">
+<script>
+(()=>{
+  const mode=localStorage.getItem("theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+  document.documentElement.dataset.theme=mode;
+  const variants={light:["ocean","sunrise","mint","lavender","slate"],dark:["midnight","ember","forest","neon","graphite"]};
+  let variant=localStorage.getItem("themeVariant");
+  if(!variants[mode].includes(variant)) variant=(mode==="dark"?"midnight":"ocean");
+  document.documentElement.dataset.variant=variant;
+})();
+</script>
+</head>
+<body>
+<noscript><div class="auth-noscript">Для входа на сайт требуется JavaScript.</div></noscript>
+<div class="login-topbar">
+  <div class="palette-wrap">
+    <button class="theme" id="palette" aria-label="Выбрать тему" aria-haspopup="true">🎨</button>
+    <div class="palette-menu" id="paletteMenu" role="menu"></div>
+  </div>
+  <button class="theme" id="theme" aria-label="Сменить тему">◐</button>
+</div>
+<main class="login-shell">
+  <form class="login-card" id="loginForm" autocomplete="off">
+    <div class="login-brand"><b>1</b>WantToPiglet</div>
+    <p class="login-sub">Доступ к сайту защищён паролем. При входе сессия привязывается к вашему IP-адресу и сохраняется 5 дней — при смене сети пароль потребуется снова.</p>
+    <div class="login-field">
+      <label for="pass">Пароль</label>
+      <input type="password" id="pass" name="pass" placeholder="••••••" autocomplete="current-password" autofocus>
+    </div>
+    <button type="submit" class="login-btn" id="loginBtn">Войти</button>
+    <div class="login-error" id="loginError">Неверный пароль. Попробуйте ещё раз.</div>
+  </form>
+</main>
+<script src="../assets/theme.js"></script>
+<script src="../assets/auth.js"></script>
+<script>
+(function(){
+  function params(){ return new URLSearchParams(location.search); }
+
+  // Если сессия уже подтверждена этим IP — сразу пускаем дальше без показа формы
+  const existing=WTPAuth.readAuth();
+  if(existing && Date.now()<existing.expires){
+    WTPAuth.fetchIP().then(ip=>{
+      if(ip && ip===existing.ip){
+        location.replace(WTPAuth.safeNext(params().get("next")));
+      }else{
+        WTPAuth.clearAuth();
+        WTPAuth.reveal();
+      }
+    });
+  }else{
+    WTPAuth.reveal();
+  }
+
+  const form=document.getElementById("loginForm");
+  const input=document.getElementById("pass");
+  const btn=document.getElementById("loginBtn");
+  const err=document.getElementById("loginError");
+
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    const val=input.value;
+    if(!val) return;
+    btn.disabled=true;
+    btn.textContent="Проверка…";
+    err.classList.remove("show");
+    WTPAuth.login(val).then(function(ok){
+      if(ok){
+        location.href=WTPAuth.safeNext(params().get("next"));
+      }else{
+        btn.disabled=false;
+        btn.textContent="Войти";
+        err.classList.add("show");
+        input.value="";
+        input.focus();
+      }
+    }).catch(function(){
+      btn.disabled=false;
+      btn.textContent="Войти";
+      err.classList.add("show");
+    });
+  });
+})();
+</script>
+</body>
+</html>
