@@ -6,54 +6,25 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="1WantToPiglet — вход">
 <title>Вход — 1WantToPiglet</title>
-<style>
-:root{
-  --bg:#f6f8fc;--panel:#fff;--text:#0a1020;--muted:#6b7484;--line:#e0e6ef;
-  --blue:#1769e0;--blue2:#0f57bf;--soft:#eef4ff;
-  --shadow:0 18px 55px rgba(24,39,69,.08);--head:rgba(246,248,252,.86)
-}
-[data-theme=dark]{
-  --bg:#090d14;--panel:#111722;--text:#f5f7fb;--muted:#9ba7b9;--line:#263044;
-  --blue:#4388f7;--blue2:#67a0fa;--soft:#17243a;
-  --shadow:0 18px 55px rgba(0,0,0,.30);--head:rgba(9,13,20,.86)
-}
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:var(--font-body,Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif);
-  transition:.25s background,.25s color
-}
-button,input{font:inherit}
-.theme,.palette-wrap .theme{
-  width:44px;height:44px;border-radius:12px;border:1px solid var(--line);
-  background:var(--panel);color:var(--text);cursor:pointer;display:inline-flex;
-  align-items:center;justify-content:center
-}
-</style>
 <link rel="stylesheet" href="../assets/theme.css">
 <script>
-(()=>{
-  const mode=localStorage.getItem("theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+(function(){
+  var mode=localStorage.getItem("wtp_theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
   document.documentElement.dataset.theme=mode;
-  const variants={light:["ocean","sunrise","mint","lavender","slate"],dark:["midnight","ember","forest","neon","graphite"]};
-  let variant=localStorage.getItem("themeVariant");
-  if(!variants[mode].includes(variant)) variant=(mode==="dark"?"midnight":"ocean");
-  document.documentElement.dataset.variant=variant;
 })();
 </script>
 </head>
 <body>
 <noscript><div class="auth-noscript">Для входа на сайт требуется JavaScript.</div></noscript>
 <div class="login-topbar">
-  <div class="palette-wrap">
-    <button class="theme" id="palette" aria-label="Выбрать тему" aria-haspopup="true">🎨</button>
-    <div class="palette-menu" id="paletteMenu" role="menu"></div>
-  </div>
-  <button class="theme" id="theme" aria-label="Сменить тему">◐</button>
+  <button class="theme-toggle" id="theme" aria-label="Сменить тему"><span class="switch"></span></button>
 </div>
 <main class="login-shell">
-  <form class="login-card" id="loginForm" autocomplete="off">
-    <div class="login-brand"><b>1</b>WantToPiglet</div>
+  <form class="panel corner-frame login-card" id="loginForm" autocomplete="off">
+    <div class="login-brand">
+      <svg class="brand-mark" viewBox="0 0 30 30" width="26" height="26"><circle cx="15" cy="15" r="12"/><path class="tick" d="M15 4v3M15 23v3M4 15h3M23 15h3" stroke-width="1.4" stroke-linecap="round"/><path class="needle" d="M15 15 L21 10" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>1WantToPiglet</span>
+    </div>
     <p class="login-sub">Доступ к сайту защищён паролем. При входе сессия привязывается к вашему IP-адресу и сохраняется 5 дней — при смене сети пароль потребуется снова.</p>
     <div class="login-field">
       <label for="pass">Пароль</label>
@@ -61,18 +32,20 @@ button,input{font:inherit}
     </div>
     <button type="submit" class="login-btn" id="loginBtn">Войти</button>
     <div class="login-error" id="loginError">Неверный пароль. Попробуйте ещё раз.</div>
+    <div class="login-foot">wantop.online · сессия по IP</div>
   </form>
 </main>
-<script src="../assets/theme.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../assets/vendor/jquery.plate.js"></script>
 <script src="../assets/auth.js"></script>
+<script src="../assets/site.js"></script>
 <script>
 (function(){
   function params(){ return new URLSearchParams(location.search); }
 
-  // Если сессия уже подтверждена этим IP — сразу пускаем дальше без показа формы
-  const existing=WTPAuth.readAuth();
+  var existing=WTPAuth.readAuth();
   if(existing && Date.now()<existing.expires){
-    WTPAuth.fetchIP().then(ip=>{
+    WTPAuth.fetchIP().then(function(ip){
       if(ip && ip===existing.ip){
         location.replace(WTPAuth.safeNext(params().get("next")));
       }else{
@@ -84,17 +57,16 @@ button,input{font:inherit}
     WTPAuth.reveal();
   }
 
-  const form=document.getElementById("loginForm");
-  const input=document.getElementById("pass");
-  const btn=document.getElementById("loginBtn");
-  const err=document.getElementById("loginError");
-
-  let lockTimer=null;
+  var form=document.getElementById("loginForm");
+  var input=document.getElementById("pass");
+  var btn=document.getElementById("loginBtn");
+  var err=document.getElementById("loginError");
+  var lockTimer=null;
 
   function formatRemaining(ms){
-    const total=Math.max(0,Math.ceil(ms/1000));
-    const m=Math.floor(total/60);
-    const s=total%60;
+    var total=Math.max(0,Math.ceil(ms/1000));
+    var m=Math.floor(total/60);
+    var s=total%60;
     return m+":"+(s<10?"0":"")+s;
   }
 
@@ -111,7 +83,7 @@ button,input{font:inherit}
     err.textContent="Слишком много неверных попыток. Попробуйте снова через "+formatRemaining(state.remainingMs)+".";
     err.classList.add("show");
     lockTimer=setInterval(function(){
-      const s=WTPAuth.lockState();
+      var s=WTPAuth.lockState();
       if(!s.locked){
         clearInterval(lockTimer);
         lockTimer=null;
@@ -131,9 +103,9 @@ button,input{font:inherit}
 
   form.addEventListener("submit",function(e){
     e.preventDefault();
-    const initial=WTPAuth.lockState();
+    var initial=WTPAuth.lockState();
     if(initial.locked){ applyLock(initial); return; }
-    const val=input.value;
+    var val=input.value;
     if(!val) return;
     btn.disabled=true;
     btn.textContent="Проверка…";

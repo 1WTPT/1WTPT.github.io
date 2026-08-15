@@ -3,205 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="1WantToPiglet — Utilities & profile">
+<meta name="description" content="1WantToPiglet — Отчётность">
 <title>Отчётность — 1WantToPiglet</title>
-<style>
-:root{
-  --bg:#f6f8fc;--panel:#fff;--text:#0a1020;--muted:#6b7484;--line:#e0e6ef;
-  --blue:#1769e0;--blue2:#0f57bf;--soft:#eef4ff;
-  --shadow:0 18px 55px rgba(24,39,69,.08);--head:rgba(246,248,252,.86)
-}
-[data-theme=dark]{
-  --bg:#090d14;--panel:#111722;--text:#f5f7fb;--muted:#9ba7b9;--line:#263044;
-  --blue:#4388f7;--blue2:#67a0fa;--soft:#17243a;
-  --shadow:0 18px 55px rgba(0,0,0,.30);--head:rgba(9,13,20,.86)
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:var(--font-body,Inter,Roboto,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif);
-  transition:.25s background,.25s color
-}
-button,input,textarea{font:inherit}
-a{color:inherit;text-decoration:none}
-.container{width:min(1160px,calc(100% - 30px));margin:auto}
-header{
-  position:sticky;top:0;z-index:30;background:var(--head);
-  border-bottom:1px solid var(--line);backdrop-filter:blur(18px)
-}
-.nav{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.brand{font-size:20px;font-weight:900;letter-spacing:-.045em;font-family:var(--font-head)}
-.brand b{color:var(--blue)}
-.actions{display:flex;gap:10px}
-.primary,.theme,.menu-btn{
-  height:44px;border-radius:var(--radius-btn,12px);display:inline-flex;align-items:center;justify-content:center
-}
-.primary{padding:0 17px;background:var(--blue);color:white;font-weight:800;border:0;cursor:pointer}
-.primary:hover,.copy:hover,.mini-copy:hover,.calc-btn:hover{background:var(--blue2)}
-.theme,.menu-btn{
-  width:44px;border:1px solid var(--line);background:var(--panel);color:var(--text);cursor:pointer
-}
-.menu-btn{flex-direction:column;gap:4px}
-.menu-btn span,.menu-btn:before,.menu-btn:after{
-  content:"";display:block;width:18px;height:2px;border-radius:9px;background:currentColor
-}
-.drawer{
-  position:fixed;inset:0 auto 0 0;width:min(320px,86vw);background:var(--panel);
-  border-right:1px solid var(--line);z-index:50;transform:translateX(-102%);
-  transition:.25s;box-shadow:var(--shadow);padding:24px
-}
-.drawer.open{transform:none}
-.drawer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
-.drawer nav{display:grid;gap:10px}
-.nav-item{
-  width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius-sm,14px);
-  background:transparent;color:var(--text);font-weight:800;text-align:left
-}
-.nav-item.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-.overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.36);z-index:40;
-  opacity:0;pointer-events:none;transition:.25s
-}
-.overlay.show{opacity:1;pointer-events:auto}
-.hero{padding:88px 0 54px}
-.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:end}
-.kicker{color:var(--blue);font-size:13px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
-h1{
-  margin:22px 0 26px;font-size:clamp(52px,8vw,96px);line-height:1.05;
-  letter-spacing:var(--h1-space,-.035em);word-spacing:.16em;font-family:var(--font-head)
-}
-.lead{max-width:760px;margin:0;color:var(--muted);font-size:19px;line-height:1.7}
-.panel,.card{
-  border:1px solid var(--line);border-radius:var(--radius-card,22px);background:var(--panel);box-shadow:var(--shadow)
-}
-.profile{padding:26px}
-.profile small{color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.11em}
-.profile strong{display:block;margin:12px 0 10px;font-size:26px}
-.contact-list{display:grid;gap:10px}
-.contact-link{
-  padding:13px 14px;border:1px solid var(--line);border-radius:var(--radius-sm,13px);background:var(--soft);
-  color:var(--blue);font-weight:800;overflow-wrap:anywhere
-}
-.section{padding:24px 0 88px}
-.section-head{margin-bottom:24px}
-.section-head h2{font-size:clamp(34px,5vw,54px);margin:0 0 12px;letter-spacing:-.045em}
-.section-head p{margin:0;color:var(--muted);font-size:18px}
-.toolbar{display:flex;gap:12px;margin-bottom:20px}
-.search{
-  width:100%;height:52px;padding:0 18px;border:1px solid var(--line);
-  border-radius:var(--radius-sm,14px);background:var(--panel);color:var(--text);outline:none
-}
-.search:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(23,105,224,.12)}
-.cards{display:grid;gap:18px}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.card{overflow:hidden}
-.card-head{
-  display:flex;align-items:center;justify-content:space-between;gap:18px;
-  padding:22px 24px;border-bottom:1px solid var(--line)
-}
-.card-head>div{display:flex;align-items:center;gap:14px}
-.num{
-  display:grid;place-items:center;width:38px;height:38px;border-radius:11px;
-  background:var(--soft);color:var(--blue);font-weight:900
-}
-h2{margin:0;font-size:20px;letter-spacing:-.025em;font-family:var(--font-head)}
-.copy,.calc-btn{
-  height:42px;padding:0 16px;border:0;border-radius:var(--radius-btn,11px);
-  background:var(--blue);color:white;font-weight:800;cursor:pointer
-}
-pre{
-  margin:0;padding:22px 24px;max-height:370px;overflow:auto;white-space:pre-wrap;
-  overflow-wrap:anywhere;font:13px/1.7 "SFMono-Regular",Consolas,monospace
-}
-.mini-list{display:grid;gap:10px;padding:18px}
-.mini-row{
-  display:grid;grid-template-columns:1fr 42px;gap:10px;align-items:center;
-  padding:12px;border:1px solid var(--line);border-radius:var(--radius-sm,13px);background:var(--soft)
-}
-.mini-row code{font:12.5px/1.55 "SFMono-Regular",Consolas,monospace;overflow-wrap:anywhere}
-.mini-copy{
-  width:42px;height:38px;border:0;border-radius:10px;background:var(--blue);
-  color:#fff;cursor:pointer;font-size:17px
-}
-.report-grid{display:grid;grid-template-columns:1fr .8fr;gap:18px}
-.report-card{padding:24px}
-.report-card h2{font-size:30px;margin-bottom:10px}
-.report-card p{color:var(--muted);line-height:1.65}
-textarea{
-  width:100%;min-height:430px;resize:vertical;padding:18px;border:1px solid var(--line);
-  border-radius:var(--radius-card,16px);background:var(--bg);color:var(--text);
-  font:14px/1.7 "SFMono-Regular",Consolas,monospace;outline:none
-}
-.calc-btn{height:50px;margin-top:14px;width:100%}
-.result{
-  margin-top:14px;padding:18px;border-radius:16px;background:var(--soft);
-  font-size:20px;font-weight:900;line-height:1.45
-}
-.weights{display:grid;grid-template-columns:1fr auto;gap:9px 16px;margin-top:18px;font-size:14px;align-items:center}
-.weights input{
-  width:82px;height:32px;padding:0 8px;border:1px solid var(--line);border-radius:8px;
-  background:var(--bg);color:var(--blue);font-weight:900;font-size:14px;text-align:right;outline:none
-}
-.weights input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(23,105,224,.12)}
-.reset-weights{
-  height:38px;padding:0 14px;margin-top:16px;border:1px solid var(--line);border-radius:var(--radius-btn,10px);
-  background:transparent;color:var(--muted);font-weight:800;font-size:13px;cursor:pointer
-}
-.reset-weights:hover{color:var(--text);border-color:var(--muted)}
-.hidden{display:none}
-footer{border-top:1px solid var(--line);color:var(--muted)}
-.foot{min-height:88px;display:flex;justify-content:space-between;align-items:center;gap:18px}
-.toast{
-  position:fixed;right:20px;bottom:20px;padding:13px 16px;border-radius:12px;
-  background:var(--text);color:var(--bg);font-weight:800;opacity:0;
-  transform:translateY(10px);transition:.2s;pointer-events:none;z-index:70
-}
-.toast.show{opacity:1;transform:none}
-@media(max-width:820px){.hero-grid,.report-grid,.two-col{grid-template-columns:1fr}}
-@media(max-width:600px){
-  h1{font-size:54px;word-spacing:.10em}
-  .primary.desktop-only{display:none}
-  .foot{flex-direction:column;align-items:flex-start;justify-content:center}
-}
-</style>
 <link rel="stylesheet" href="../assets/theme.css">
-
 <script>
-(()=>{
-  const mode=localStorage.getItem("theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+(function(){
+  var mode=localStorage.getItem("wtp_theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
   document.documentElement.dataset.theme=mode;
-  const variants={light:["ocean","sunrise","mint","lavender","slate"],dark:["midnight","ember","forest","neon","graphite"]};
-  let variant=localStorage.getItem("themeVariant");
-  if(!variants[mode].includes(variant)) variant=(mode==="dark"?"midnight":"ocean");
-  document.documentElement.dataset.variant=variant;
 })();
 </script>
-
 </head>
 <body>
 <noscript><div class="auth-noscript">Для входа на сайт требуется JavaScript.</div></noscript>
 <header>
   <div class="container nav">
     <button class="menu-btn" id="menuBtn" aria-label="Открыть меню"><span></span></button>
-    <a class="brand" href="../home/"><b>1</b>WantToPiglet</a>
+    <a class="brand" href="../home/">
+      <svg class="brand-mark" viewBox="0 0 30 30"><circle cx="15" cy="15" r="12"/><path class="tick" d="M15 4v3M15 23v3M4 15h3M23 15h3" stroke-width="1.4" stroke-linecap="round"/><path class="needle" d="M15 15 L21 10" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>1WantToPiglet<small>Панель модератора</small></span>
+    </a>
     <div class="actions">
-      <a class="primary desktop-only" href="https://vk.ru/basatkl" target="_blank" rel="noopener">Написать</a>
-      <div class="palette-wrap">
-        <button class="theme" id="palette" aria-label="Выбрать тему" aria-haspopup="true">🎨</button>
-        <div class="palette-menu" id="paletteMenu" role="menu"></div>
-      </div>
-      <button class="theme" id="theme" aria-label="Сменить тему">◐</button>
+      <a class="btn desktop-only" href="https://vk.ru/basatkl" target="_blank" rel="noopener">Написать</a>
+      <button class="theme-toggle" id="theme" aria-label="Сменить тему"><span class="switch"></span></button>
     </div>
   </div>
 </header>
 <aside class="drawer" id="drawer">
-  <div class="drawer-top"><strong>Разделы</strong><button class="theme" id="closeDrawer">×</button></div>
+  <div class="drawer-top"><strong>Разделы</strong><button class="theme-toggle" id="closeDrawer" aria-label="Закрыть">×</button></div>
   <nav>
-    <a class="nav-item " href="../home/">Home</a>
-    <a class="nav-item " href="../filters/">Filters</a>
-    <a class="nav-item " href="../forks/">Forks</a>
-    <a class="nav-item active" href="../otchet/">Отчётность</a>
+    <a class="nav-item" href="../home/">Home<span class="tag">00</span></a>
+    <a class="nav-item" href="../filters/">Filters<span class="tag">01</span></a>
+    <a class="nav-item" href="../forks/">Forks<span class="tag">02</span></a>
+    <a class="nav-item active" href="../otchet/">Отчётность<span class="tag">03</span></a>
     <button type="button" class="nav-item" id="logoutBtn">Выйти</button>
   </nav>
 </aside>
@@ -209,14 +42,14 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
 <main>
 <section class="hero">
   <div class="container">
-    <div class="kicker">Отчётность</div>
+    <div class="kicker">Модуль 03 · Отчётность</div>
     <h1>Расчёт КПД по отчёту.</h1>
     <p class="lead">Вставьте отчёт в исходном формате — итог будет округлён до целого числа.</p>
   </div>
 </section>
 <section class="section">
   <div class="container report-grid">
-    <div class="panel report-card">
+    <div class="panel corner-frame report-card">
       <h2>Введите отчёт</h2>
       <p>Дата берётся из строки <b>#отчет ДД.ММ</b>.</p>
       <textarea id="reportInput" placeholder="#отчет 22.12
@@ -237,7 +70,7 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
       <button class="calc-btn" id="calcBtn">Рассчитать КПД</button>
       <div class="result" id="result">Здесь появится готовый результат.</div>
     </div>
-    <div class="panel report-card">
+    <div class="panel corner-frame report-card">
       <h2>Коэффициенты</h2>
       <p>Неизвестные строки и event-spec не прибавляют КПД. Значения можно редактировать — они сохраняются в этом браузере.</p>
       <div class="weights" id="weights">
@@ -261,51 +94,14 @@ footer{border-top:1px solid var(--line);color:var(--muted)}
   </div>
 </section>
 </main>
-<footer><div class="container foot"><span>© <span id="year"></span> 1WantToPiglet</span><span>Utilities & profile</span></div></footer>
+<footer><div class="container foot"><span>© <span id="year"></span> 1WantToPiglet</span><span>wantop.online</span></div></footer>
 <div class="toast" id="toast">Скопировано</div>
-<script src="../assets/theme.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../assets/vendor/jquery.plate.js"></script>
 <script src="../assets/auth.js"></script>
+<script src="../assets/site.js"></script>
 <script>
-const root=document.documentElement;
 WTPAuth.guard();
-const toast=document.getElementById("toast");
-const notify=t=>{
-  if(!toast)return;
-  toast.textContent=t;
-  toast.classList.add("show");
-  clearTimeout(window.toastTimer);
-  window.toastTimer=setTimeout(()=>toast.classList.remove("show"),1500);
-};
-async function copyText(text){
-  try{await navigator.clipboard.writeText(text);return true}
-  catch{
-    const area=document.createElement("textarea");
-    area.value=text;area.style.position="fixed";area.style.opacity="0";
-    document.body.appendChild(area);area.select();
-    const ok=document.execCommand("copy");area.remove();return ok;
-  }
-}
-document.querySelectorAll("[data-copy]").forEach(btn=>{
-  btn.addEventListener("click",async()=>{
-    notify(await copyText(btn.dataset.copy)?"Скопировано":"Ошибка копирования");
-  });
-});
-document.getElementById("logoutBtn")?.addEventListener("click",()=>{
-  WTPAuth.logout();
-});
-const drawer=document.getElementById("drawer");
-const overlay=document.getElementById("overlay");
-const closeDrawer=()=>{
-  drawer?.classList.remove("open");
-  overlay?.classList.remove("show");
-};
-document.getElementById("menuBtn")?.addEventListener("click",()=>{
-  drawer?.classList.add("open");
-  overlay?.classList.add("show");
-});
-document.getElementById("closeDrawer")?.addEventListener("click",closeDrawer);
-overlay?.addEventListener("click",closeDrawer);
-document.getElementById("year").textContent=new Date().getFullYear();
 
 const DEFAULT_WEIGHTS={
   "banspec":1,"усл.ед":1,"pve":.7,"pvp":.9,"freeze":.6,"revise":1.1,
@@ -334,6 +130,14 @@ function renderWeightInputs(){
   });
 }
 renderWeightInputs();
+const notifyLocal=t=>{
+  const toast=document.getElementById("toast");
+  if(!toast)return;
+  toast.textContent=t;
+  toast.classList.add("show");
+  clearTimeout(window.__wtpToastTimer);
+  window.__wtpToastTimer=setTimeout(()=>toast.classList.remove("show"),1500);
+};
 weightInputs.forEach(inp=>{
   inp.addEventListener("change",()=>{
     const key=inp.dataset.key;
@@ -341,14 +145,14 @@ weightInputs.forEach(inp=>{
     weights[key]=isNaN(parsed)?DEFAULT_WEIGHTS[key]:parsed;
     inp.value=weights[key];
     saveWeights(weights);
-    notify("Коэффициент сохранён");
+    notifyLocal("Коэффициент сохранён");
   });
 });
 document.getElementById("resetWeights")?.addEventListener("click",()=>{
   weights=Object.assign({},DEFAULT_WEIGHTS);
   saveWeights(weights);
   renderWeightInputs();
-  notify("Коэффициенты сброшены");
+  notifyLocal("Коэффициенты сброшены");
 });
 function normalizeLabel(value){
   let s=value.toLowerCase().trim().replace(/ё/g,"е").replace(/\s+/g," ");
@@ -379,7 +183,7 @@ document.getElementById("calcBtn")?.addEventListener("click",()=>{
     }
   });
   const rounded=Math.round(total);
-  result.textContent=`КПД за ${dateMatch[1]} рассчитан и равен ${rounded}`;
+  result.innerHTML=`КПД за ${dateMatch[1]}<span class="readout">${rounded}</span>`;
 });
 </script>
 </body>
